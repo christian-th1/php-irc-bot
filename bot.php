@@ -42,43 +42,31 @@ while (1) {
                 chr(10),
                 chr(13)
             ), '', $ex[3]);
-            if ($command == ":!alive?") {
-                fputs($socket, "PRIVMSG " . $ex[2] . " :whazzup? \n");
-            }
-            if ($command == ":!time") {
-                fputs($socket, "PRIVMSG " . $ex[2] . " :" . date(DATE_RFC2822) . " \n");
-            }
-            if ($command == ":!help") {
-                fputs($socket, "PRIVMSG " . $ex[2] . " :Hambot phpIRCbot v0.1 commands. \n");
-                fputs($socket, "PRIVMSG " . $ex[2] . " :!alive?, !time, !slave, !chucknorris, !meme !meat \n");
-            }
-            if ($command == ":!slave") {
-                
-                $parts = explode("!", $ex[0]);
-                $user  = substr($parts['0'], 1);
-                
-                if ($user == $master)
-                    fputs($socket, "PRIVMSG " . $ex[2] . " :Yes master! \n");
-                else
-                    fputs($socket, "PRIVMSG " . $ex[2] . " :get lost " . $user . " you filthy infidel! \n");
-            }
-            if ($command == ":!test") {
-                fputs($socket, "PRIVMSG " . $ex[2] . " :value0 " . $ex[0] . ", value1 " . $ex[1] . ",value2 " . $ex[2] . ",value3 " . $ex[3] . "\n");
-            }
-            if ($command == ":!chucknorris") {
-                $joke = json_decode(file_get_contents('http://api.icndb.com/jokes/random', true));
-                fputs($socket, "PRIVMSG " . $ex[2] . " :" . $joke->value->joke . " \n");
-            }
-            if ($command == ":!meme") {
-                $meme = file_get_contents('http://api.automeme.net/text?lines=1');
-                fputs($socket, "PRIVMSG " . $ex[2] . " :" . $meme . " \n");
-            }
-            if ($command == ":!meat") {
-                $meat = file_get_contents('http://baconipsum.com/api/?type=all-meat&sentences=1');
-                $meat = explode(" ", $meat);
-                $meat = substr($meat['0'], 2);
-                fputs($socket, "PRIVMSG " . $ex[2] . " :" . $meat . " \n");
-            }
+		
+			switch($command) {
+				case ":!alive?":
+					fputs($socket, "PRIVMSG " . $ex[2] . " :whazzup? \n");
+						break;
+				case ":!time":
+					fputs($socket, "PRIVMSG " . $ex[2] . " :" . date(DATE_RFC2822) . " \n");
+						break;
+				case ":!help":
+					fputs($socket, "PRIVMSG " . $ex[2] . " :Hambot phpIRCbot v0.1 commands. \n");
+					sleep(1);
+					fputs($socket, "PRIVMSG " . $ex[2] . " :!alive?, !time, !slave \n");
+						break;
+				case ":!slave":
+					$parts = explode("!", $ex[0]);
+					$user  = substr($parts['0'], 1);
+					if ($user == $master)
+						fputs($socket, "PRIVMSG " . $ex[2] . " :Yes master! \n");
+					else
+						fputs($socket, "PRIVMSG " . $ex[2] . " :get lost " . $user . " you filthy infidel! \n");
+						break;
+				case ":!test":
+					fputs($socket, "PRIVMSG " . $ex[2] . " :value0 " . $ex[0] . ", value1 " . $ex[1] . ",value2 " . $ex[2] . ",value3 " . $ex[3] . "\n");
+						break;
+			}	
         }
     }
 }
